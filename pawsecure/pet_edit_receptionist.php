@@ -46,12 +46,12 @@ $pet = $pet->fetch(PDO::FETCH_ASSOC);
 <body>
 <h2> Edit Pet</h2>
 <form method="POST">
-    Pet Name: <input name="pet_name" required><br>
-    Owner Name: <input name="owner_name" required><br>
-    Owner Contact: <input name="owner_contact" required><br>
-    Diagnosis: <input name="diagnosis"><br>
-    Fee: <input type="number" step="0.01" name="treatment_fee" required><br>
-    Age: <input type="number" name="age" required><br><br>
+    Pet Name: <input name="pet_name" value="<?= htmlspecialchars($pet['pet_name']) ?>" required><br>
+    Owner Name: <input name="owner_name" value="<?= htmlspecialchars($pet['owner_name']) ?>" required><br>
+    Owner Contact: <input name="owner_contact" value="<?= htmlspecialchars($pet['owner_contact']) ?>" required><br>
+    Diagnosis: <input name="diagnosis" value="<?= htmlspecialchars($pet['diagnosis']) ?>"><br>
+    Fee: <input type="number" step="0.01" name="treatment_fee" value="<?= htmlspecialchars($pet['treatment_fee']) ?>" required><br>
+    Age: <input type="number" name="age" value="<?= htmlspecialchars($pet['age']) ?>" required><br><br>
     <button name="update">Update</button>
 </form>
 </body>
