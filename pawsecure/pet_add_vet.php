@@ -50,10 +50,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <h2>Add Pet Record</h2>
 
 <form method="post">
-    Pet Name: <input type="text" name="pet_name" required><br><br>
-    Species: <input type="text" name="species" required><br><br>
-    Owner Name: <input type="text" name="owner_name" required><br><br>
-    Contact: <input type="text" name="owner_contact" required><br><br>
+    Pet Name: <input type="text" name="pet_name" required><br>
+    Owner Name: <input type="text" name="owner_name" required><br>
+    Contact: <input type="text" name="owner_contact" required><br>
+    
+    Diagnosis: <input type="text" name="diagnosis"><br>
+    Treatment Fee: <input type="number" step="0.01" name="treatment_fee"><br>
+    
     Age: <input type="number" name="age" required><br><br>
 
     <button type="submit">Save</button>
