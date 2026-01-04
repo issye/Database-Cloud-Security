@@ -1,54 +1,67 @@
 <?php
-session_start(); // NEW: start session to get user_id
 include 'db_connect.php';
 
-if (isset($_POST['save'])) {
-    $stmt = $conn->prepare(
-        "INSERT INTO pets (pet_name, owner_name, owner_contact, diagnosis, treatment_fee, age)
-        VALUES (?, ?, ?, ?, ?, ?)"
-    );
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+    // Collect input
+    $pet_name = trim($_POST['pet_name'] ?? '');
+    $species  = trim($_POST['species'] ?? '');
+    $owner    = trim($_POST['owner_name'] ?? '');
+    $contact  = trim($_POST['owner_contact'] ?? '');
+    $age      = trim($_POST['age'] ?? '');
+
+    // Server-side input validation
+    if (
+        empty($pet_name) ||
+        empty($species) ||
+        empty($owner) ||
+        empty($contact) ||
+        empty($age)
+    ) {
+        die("Invalid input detected.");
+    }
+
+    // Insert using prepared statement
+    $stmt = $conn->prepare("
+        INSERT INTO pets (pet_name, species, owner_name, owner_contact, age)
+        VALUES (?, ?, ?, ?, ?)
+    ");
+
     $stmt->execute([
-        $_POST['pet_name'],
-        $_POST['owner_name'],
-        $_POST['owner_contact'],
-        $_POST['diagnosis'],
-        $_POST['treatment_fee'],
-        $_POST['age']
+        $pet_name,
+        $species,
+        $owner,
+        $contact,
+        $age
     ]);
 
-    $pet_id = $conn->lastInsertId(); // NEW: get the inserted pet's ID
-
-    // --- Audit log ---
-    $stmtLog = $conn->prepare(
-        "INSERT INTO audit_log (user_id, action_type, details) VALUES (?, ?, ?)"
-    );
-    $stmtLog->execute([
-        $_SESSION['user_id'],
-        'Add Pet',
-        "Added pet ID $pet_id: Name={$_POST['pet_name']}, Owner={$_POST['owner_name']}, Fee={$_POST['treatment_fee']}"
-    ]);
-
-    header("Location: pets_list_receptionist.php");
-
+    header("Location: receptionist_dashboard.php");
+    exit;
 }
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-        <title>Add Pet</title>
-        <link rel="stylesheet" href="style.css">
-</head>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Pet (Receptionist)</title>
+</head>
 <body>
-<h2>Add Pet</h2>
-<form method="POST">
-    Pet Name: <input name="pet_name" required><br>
-    Owner Name: <input name="owner_name" required><br>
-    Owner Contact: <input name="owner_contact" required><br>
-    Diagnosis: <input name="diagnosis"><br>
-    Fee: <input type="number" step="0.01" name="treatment_fee" required><br>
+
+<h2>Add Pet Record</h2>
+
+<form method="post">
+    Pet Name: <input type="text" name="pet_name" required><br><br>
+    Species: <input type="text" name="species" required><br><br>
+    Owner Name: <input type="text" name="owner_name" required><br><br>
+    Contact: <input type="text" name="owner_contact" required><br><br>
     Age: <input type="number" name="age" required><br><br>
-    <button name="save">Save</button>
+
+    <button type="submit">Save</button>
 </form>
+
+<br>
+<a href="receptionist_dashboard.php">⬅ Back</a>
+
 </body>
 </html>
