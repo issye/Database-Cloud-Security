@@ -59,9 +59,5 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <button type="submit">Save</button>
 </form>
-
-<br>
-<a href="receptionist_dashboard.php">⬅ Back</a>
-
 </body>
 </html>
